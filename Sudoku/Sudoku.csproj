@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="img\negative.png" />
+    <None Remove="img\positive.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="img\negative.png" />
+    <Resource Include="img\positive.jpg" />
+  </ItemGroup>
+
+</Project>

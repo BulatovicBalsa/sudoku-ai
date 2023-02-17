@@ -1,0 +1,19 @@
+﻿<Window x:Class="Sudoku.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sudoku"
+        mc:Ignorable="d"
+        Title="Sudoku" Height="450" Width="500">
+    <Grid>
+        <Canvas x:Name="canMain">
+            <Button x:Name="startButton" Content="Solve" Canvas.Left="387" Canvas.Top="109" HorizontalAlignment="Left" VerticalAlignment="Top" Width="87" Height="26" Click="startButton_Click"></Button>
+            <Button x:Name="checkButton" Content="Check" Canvas.Left="387" Canvas.Top="169" HorizontalAlignment="Center" VerticalAlignment="Top" Width="87" Height="26" Click="checkButton_Click"></Button>
+
+            <Image x:Name="posImage" HorizontalAlignment="Center" VerticalAlignment="Top" Width="84" Height="59" Canvas.Left="387" Canvas.Top="234" Source="/img/positive.jpg"></Image>
+            <Image x:Name="negImage" HorizontalAlignment="Center" VerticalAlignment="Top" Width="84" Height="59" Canvas.Left="387" Canvas.Top="234" Source="/img/negative.png"></Image>
+
+        </Canvas>
+    </Grid>
+</Window>
