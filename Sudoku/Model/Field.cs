@@ -12,7 +12,7 @@ namespace Sudoku.Model
         public ushort Value { get { return value; } set { this.value = value; } }
 
         private bool solved;
-        public bool Solved { get { return solved; } }
+        public bool Solved { get { return solved; } set { solved = value; } }
 
         private HashSet<ushort> candidates = new HashSet<ushort>();
         public HashSet<ushort> Candidates { get { return candidates; } }

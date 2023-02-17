@@ -1,4 +1,5 @@
 ﻿using Sudoku.Model;
+using Sudoku.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,9 @@ namespace Sudoku
     /// </summary>
     public partial class MainWindow : Window
     {
+        Checkers checkers = new Checkers();
+        Fields fields = new Fields();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -28,21 +32,38 @@ namespace Sudoku
 
             posImage.Visibility = Visibility.Collapsed;
             negImage.Visibility = Visibility.Collapsed;
-            Fields fields = new Fields();
             fields.Draw(canMain);
         }
 
         private void startButton_Click(object sender, RoutedEventArgs e)
         {
-
+            checkers.InitGame(fields);
+            if (!checkers.IsPlayable(fields))
+            {
+                fields.UnsolveAll();
+                posImage.Visibility = Visibility.Collapsed;
+                negImage.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                posImage.Visibility = Visibility.Visible;
+                negImage.Visibility = Visibility.Collapsed;
+                startButton.Click -= startButton_Click;
+            }
         }
 
         private void checkButton_Click(object sender, RoutedEventArgs e)
         {
-            if (negImage.Visibility == Visibility.Collapsed)
+            if (!checkers.IsPlayable(fields))
+            {
+                posImage.Visibility = Visibility.Collapsed;
                 negImage.Visibility = Visibility.Visible;
-            else if (negImage.Visibility == Visibility.Visible) 
+            }
+            else
+            {
+                posImage.Visibility = Visibility.Visible;
                 negImage.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

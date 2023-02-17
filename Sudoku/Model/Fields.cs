@@ -19,6 +19,8 @@ namespace Sudoku.Model
 
         private Button[] buttons = new Button[81];
 
+        public Button[] Buttons { get { return buttons; } set { buttons = value; } }
+
         public Fields()
         {
             for (int i = 0; i < arr.Length; i++)
@@ -29,6 +31,17 @@ namespace Sudoku.Model
 
         public void Draw(Canvas canMain)
         {
+            int[,] res = new int[,] {
+              { 5, 3, 4, 6, 7, 8, 9, 1, 2},
+              { 6, 7, 2, 1, 9, 5, 3, 4, 8 },
+              { 1, 9, 8, 3, 4, 2, 5, 6, 7 },
+              { 8, 5, 9, 7, 6, 1, 4, 2, 3 },
+              { 4, 2, 6, 8, 5, 3, 7, 9, 1 },
+              { 7, 1, 3, 9, 2, 4, 8, 5, 6 },
+              { 9, 6, 1, 5, 3, 7, 2, 8, 4 },
+              { 2, 8, 7, 4, 1, 9, 6, 3, 5 },
+              { 3, 4, 5, 2, 8, 6, 1, 7, 9} 
+            };
             int currentHeight = -size + _MOV;
             int paddingLeft = _MOV;
             Button btn;
@@ -36,7 +49,9 @@ namespace Sudoku.Model
             {
                 btn = new Button();
                 buttons[i] = btn;
-                buttons[i].Content = "";
+
+                arr[i].Value = 0; //(ushort) res[i / 9, i % 9];
+                buttons[i].Content = ""; // res[i / 9, i % 9];
                 buttons[i].FontSize = 22;
                 buttons[i].FontWeight = FontWeights.Medium;
                 if (Paint(i)) buttons[i].Background = Brushes.Yellow;
@@ -77,6 +92,7 @@ namespace Sudoku.Model
         }
         public void FieldPressed(int i, bool leftClick)
         {
+            if (arr[i].Solved) { return; }
             if (leftClick) { arr[i].Value++; changeButtonValue(i); return; }
             else { arr[i].Value--; changeButtonValue(i); return; }
         }
@@ -103,6 +119,17 @@ namespace Sudoku.Model
                 if (j > 2 && j < 6) return true;
             }
             return false;
+        }
+
+        public void UnsolveAll()
+        {
+            int i = 0;
+            foreach (var item in arr)
+            {
+                buttons[i].Foreground = Brushes.Black;
+                item.Solved = false;
+                i++;
+            }
         }
     }
 }
