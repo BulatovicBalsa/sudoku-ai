@@ -61,6 +61,7 @@ namespace Sudoku
             }
             else
             {
+                checkers.SetCandidates(fields);
                 posImage.Visibility = Visibility.Visible;
                 negImage.Visibility = Visibility.Collapsed;
             }

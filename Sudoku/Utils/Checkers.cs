@@ -20,7 +20,8 @@ namespace Sudoku.Utils
             return true;
         }
 
-        public int SolvedFieldsCount(Fields fields) {
+        public int SolvedFieldsCount(Fields fields)
+        {
             int i = 0;
             foreach (Field item in fields.Arr)
             {
@@ -42,7 +43,7 @@ namespace Sudoku.Utils
                 i++;
             }
         }
-        
+
         public Field[] GetRow(Fields fields, int row)
         {
             Field[] fields1 = new Field[9];
@@ -56,7 +57,7 @@ namespace Sudoku.Utils
         public Field[] GetColumn(Fields fields, int column)
         {
             Field[] fields1 = new Field[9];
-            for (int i = column; i < 81; i+=9)
+            for (int i = column; i < 81; i += 9)
             {
                 fields1[(i - column) / 9] = fields.Arr[i];
             }
@@ -89,7 +90,8 @@ namespace Sudoku.Utils
                 if (set.Contains(item.Value) && item.Value != 0)
                 {
                     return false;
-                } else
+                }
+                else
                 {
                     set.Add(item.Value);
                 }
@@ -134,6 +136,85 @@ namespace Sudoku.Utils
                 }
             }
             return true;
+        }
+
+        public int GetBlockIndex(int index)
+        {
+            int i = index / 9;
+            int j = index % 9;
+
+            return i - i % 3 + j / 3;
+        }
+
+        public void SetCandidates(Fields fields)
+        {
+            for (int i = 0; i < fields.Arr.Length; i++)
+            {
+                if (fields.Arr[i].Solved)
+                    continue;
+
+                int block = GetBlockIndex(i);
+                int row = i / 9;
+                int column = i % 9;
+
+                RemoveCandidates(GetRow(fields, row), fields.Arr[i]);
+                RemoveCandidates(GetColumn(fields, column), fields.Arr[i]);
+                RemoveCandidates(GetBlock(fields, block), fields.Arr[i]);
+
+                var f = fields.Arr[i];
+                if (f.Candidates.Count == 1)
+                {
+                    f.Value = f.Candidates.First();
+                    fields.Buttons[i].Content = f.Value;
+                    f.Solved = true;
+                }
+            }
+            for (int i = 0; i < fields.Arr.Length; i++)
+            {
+                if (!fields.Arr[i].Solved)
+                    CheckBlock(i, fields);
+            }
+
+        }
+
+        public void RemoveCandidates(Field[] fields, Field f)
+        {
+            foreach (var item in fields)
+            {
+                if (item.Value != 0)
+                    f.Candidates.Remove(item.Value);
+            }
+        }
+
+        public void CheckBlock(int b, Fields fields)
+        {
+            Field[] block = GetBlock(fields, GetBlockIndex(b));
+            for (int i = 1; i < 10; i++)
+            {
+                bool fillable = true;
+                if (!fields.Arr[b].Candidates.Contains((ushort)i))
+                    continue;
+
+                foreach (var item in block)
+                {
+                    if (item == fields.Arr[b]) continue;
+                    if (item.Value == i) { fillable = false; break; }
+                    if (item.Solved) continue;
+                    if (item.Candidates.Contains((ushort) i))
+                    {
+                        fillable = false;
+                        break;
+                    }
+                }
+                if (fillable)
+                {
+                    var f = fields.Arr[b];
+                    f.Value = (ushort) i;
+                    fields.Buttons[b].Content = f.Value;
+                    f.Solved = true;
+                    return;
+                }
+            }
         }
     }
 }

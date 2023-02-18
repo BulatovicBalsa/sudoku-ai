@@ -21,7 +21,7 @@ namespace Sudoku.Model
         {
             value = 0;
             solved = false;
-            candidates = new HashSet<ushort>();
+            candidates = new HashSet<ushort>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         }
 
         public Field(ushort value)
