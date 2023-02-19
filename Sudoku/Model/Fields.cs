@@ -21,6 +21,10 @@ namespace Sudoku.Model
 
         public Button[] Buttons { get { return buttons; } set { buttons = value; } }
 
+        private int unsolvedFields = 81;
+
+        public int UnsolvedFields { get { return unsolvedFields; } set { unsolvedFields = value; } }
+
         public Fields()
         {
             for (int i = 0; i < arr.Length; i++)
@@ -41,6 +45,17 @@ namespace Sudoku.Model
               { 6, 0, 0, 0, 7, 0, 0, 0, 4 },
               { 0, 0, 7, 0, 0, 9, 0, 0, 0 },
               { 0, 3, 0, 0, 8, 0, 0, 1, 2 }
+            };
+            res = new int[,] {
+              { 0, 2, 0, 5, 0, 1, 0, 9, 0 },
+              { 8, 0, 0, 2, 0, 3, 0, 0, 6 },
+              { 0, 3, 0, 0, 6, 0, 0, 7, 0 },
+              { 0, 0, 1, 0, 0, 0, 0, 0, 0 },
+              { 5, 4, 0, 0, 0, 0, 0, 1, 9 },
+              { 0, 0, 2, 0, 0, 0, 0, 0, 0 },
+              { 0, 9, 0, 0, 3, 0, 0, 8, 0 },
+              { 2, 0, 0, 8, 0, 4, 0, 0, 7 },
+              { 0, 1, 0, 9, 0, 7, 0, 6, 0 }
             };
             int currentHeight = -size + _MOV;
             int paddingLeft = _MOV;

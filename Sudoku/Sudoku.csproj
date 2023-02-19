@@ -5,14 +5,26 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>img\sudoku.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="img\fw1.png" />
+    <None Remove="img\fw2.png" />
+    <None Remove="img\fw3.jpg" />
     <None Remove="img\negative.png" />
     <None Remove="img\positive.jpg" />
+    <None Remove="img\sudoku.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="img\sudoku.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="img\fw1.png" />
+    <Resource Include="img\fw2.png" />
+    <Resource Include="img\fw3.jpg" />
     <Resource Include="img\negative.png" />
     <Resource Include="img\positive.jpg" />
   </ItemGroup>

@@ -13,6 +13,9 @@
 
             <Image x:Name="posImage" HorizontalAlignment="Center" VerticalAlignment="Top" Width="84" Height="59" Canvas.Left="387" Canvas.Top="234" Source="/img/positive.jpg"></Image>
             <Image x:Name="negImage" HorizontalAlignment="Center" VerticalAlignment="Top" Width="84" Height="59" Canvas.Left="387" Canvas.Top="234" Source="/img/negative.png"></Image>
+            <Image x:Name="fw1Img" HorizontalAlignment="Center" VerticalAlignment="Top" Width="84" Height="59" Canvas.Left="387" Canvas.Top="234" Source="/img/fw1.png"></Image>
+            <Image x:Name="fw2Img" HorizontalAlignment="Center" VerticalAlignment="Top" Width="84" Height="59" Canvas.Left="387" Canvas.Top="234" Source="/img/fw2.png"></Image>
+            <Image x:Name="fw3Img" HorizontalAlignment="Center" VerticalAlignment="Top" Width="84" Height="59" Canvas.Left="387" Canvas.Top="234" Source="/img/fw3.jpg"></Image>
 
         </Canvas>
     </Grid>

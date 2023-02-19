@@ -40,3 +40,4 @@ C:\Users\Dell\Documents\balsa\Sudoku\sudoku-ai\Sudoku\obj\Debug\net6.0-windows\S
 C:\Users\Dell\Documents\balsa\Sudoku\sudoku-ai\Sudoku\obj\Debug\net6.0-windows\Sudoku.csproj.CoreCompileInputs.cache
 C:\Users\Dell\Documents\balsa\Sudoku\sudoku-ai\Sudoku\obj\Debug\net6.0-windows\Sudoku.genruntimeconfig.cache
 C:\Users\Dell\Documents\balsa\Sudoku\sudoku-ai\Sudoku\obj\Debug\net6.0-windows\ref\Sudoku.dll
+C:\Users\Dell\Documents\balsa\Sudoku\sudoku-ai\Sudoku\obj\Debug\net6.0-windows\Sudoku_Content.g.cs

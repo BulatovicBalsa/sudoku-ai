@@ -22,12 +22,7 @@ namespace Sudoku.Utils
 
         public int SolvedFieldsCount(Fields fields)
         {
-            int i = 0;
-            foreach (Field item in fields.Arr)
-            {
-                if (item.Solved) i++;
-            }
-            return i;
+            return 81 - fields.UnsolvedFields;
         }
 
         public void InitGame(Fields fields)
@@ -39,6 +34,7 @@ namespace Sudoku.Utils
                 {
                     fields.Buttons[i].Foreground = Brushes.Red;
                     item.Solved = true;
+                    fields.UnsolvedFields--;
                 }
                 i++;
             }
@@ -148,6 +144,7 @@ namespace Sudoku.Utils
 
         public void SetCandidates(Fields fields)
         {
+            int before = fields.UnsolvedFields;
             for (int i = 0; i < fields.Arr.Length; i++)
             {
                 if (fields.Arr[i].Solved)
@@ -167,12 +164,18 @@ namespace Sudoku.Utils
                     f.Value = f.Candidates.First();
                     fields.Buttons[i].Content = f.Value;
                     f.Solved = true;
+                    fields.UnsolvedFields--;
                 }
             }
             for (int i = 0; i < fields.Arr.Length; i++)
             {
                 if (!fields.Arr[i].Solved)
-                    CheckBlock(i, fields);
+                    CheckAllArray(i, fields);
+            }
+            if (before == fields.UnsolvedFields)
+            {
+                int firstUnsolved = FindUnsolved(fields);
+                SolveUnsolvedField(firstUnsolved, fields);
             }
 
         }
@@ -186,9 +189,27 @@ namespace Sudoku.Utils
             }
         }
 
+        public void CheckRow(int b, Fields fields)
+        {
+            Field[] row = GetRow(fields, b / 9);
+            CheckArray(b, fields, row);
+        }
+
+        public void CheckColumn(int b, Fields fields)
+        {
+            Field[] column = GetColumn(fields, b % 9);
+            CheckArray(b, fields, column);
+        }
+
         public void CheckBlock(int b, Fields fields)
         {
             Field[] block = GetBlock(fields, GetBlockIndex(b));
+            CheckArray(b, fields, block);
+        }
+
+        public void CheckArray(int b, Fields fields, Field[] block)
+        {
+            if (fields.Arr[b].Solved) return;
             for (int i = 1; i < 10; i++)
             {
                 bool fillable = true;
@@ -212,9 +233,44 @@ namespace Sudoku.Utils
                     f.Value = (ushort) i;
                     fields.Buttons[b].Content = f.Value;
                     f.Solved = true;
+                    fields.UnsolvedFields--;
                     return;
                 }
             }
+        }
+
+        public void CheckAllArray(int b, Fields fields)
+        {
+            CheckBlock(b, fields);
+            CheckRow(b, fields);
+            CheckColumn(b, fields);
+        }
+
+        public int FindUnsolved(Fields fields)
+        {
+            for (int i = 0; i < fields.Arr.Length; i++)
+            {
+                if (!fields.Arr[i].Solved)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public void SolveUnsolvedField(int b, Fields fields)
+        {
+            var f = fields.Arr[b];
+            f.Value = f.Candidates.First();
+            fields.Buttons[b].Content = f.Value;
+            f.Solved = true;
+            fields.UnsolvedFields--;
+            return;
+        }
+
+        public bool GameOver(Fields fields)
+        {
+            return fields.UnsolvedFields == 0;
         }
     }
 }
