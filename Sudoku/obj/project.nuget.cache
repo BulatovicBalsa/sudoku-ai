@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "kMl6KFZFpU6F9meAz0uZgL6n45ivaiaIapMnn6OvDNH7XhD7+gEvQkKMasKvtDVY11O6u3FayXMgqxHP8WIL5g==",
+  "dgSpecHash": "hTSOMVSXVtJIpqOouxs9AI419v808tem/aNqzWWkAgMNyCrFoDgxJvkNqOT+i3y6mbCKwgz0T80aNqpzKjUq6g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Dell\\Documents\\balsa\\Sudoku\\sudoku-ai\\Sudoku\\Sudoku.csproj",
+  "projectFilePath": "E:\\balsa\\ostalo\\Sudoku\\Sudoku\\Sudoku\\Sudoku.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

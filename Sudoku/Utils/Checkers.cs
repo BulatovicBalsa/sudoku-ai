@@ -1,5 +1,6 @@
 ﻿using Sudoku.Model;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace Sudoku.Utils
 {
     internal class Checkers
     {
+        private bool tried = false;
         public bool IsPlayable(Fields fields)
         {
             //if (SolvedFieldsCount(fields) < 17) return false;
@@ -142,21 +144,51 @@ namespace Sudoku.Utils
             return i - i % 3 + j / 3;
         }
 
-        public void SetCandidates(Fields fields)
+        public void SolveSudoku(Fields fields)
         {
             int before = fields.UnsolvedFields;
+
+            SetCandidates(fields);
+            
+            for (int i = 0; i < fields.Arr.Length; i++)
+            {
+                if (!fields.Arr[i].Solved)
+                    CheckAllArray(i, fields);
+            }
+            if (before == fields.UnsolvedFields)
+            {   
+                if (tried)
+                {
+                    tried = false;
+                    int firstUnsolved = FindUnsolved(fields);
+                    SolveUnsolvedField(firstUnsolved, fields);
+                    return;
+                }
+
+                SetCandidates(fields);
+                for (int i = 0; i < 9; i++)
+                {
+                    Field[] block = GetBlock(fields, i);
+                    AllCandsOneRowColumn(block, fields);
+                    tried = true;
+                }
+            }
+        }
+
+        private void SetCandidates(Fields fields)
+        {
             for (int i = 0; i < fields.Arr.Length; i++)
             {
                 if (fields.Arr[i].Solved)
                     continue;
 
-                int block = GetBlockIndex(i);
+                int blockIndex = GetBlockIndex(i);
                 int row = i / 9;
                 int column = i % 9;
 
                 RemoveCandidates(GetRow(fields, row), fields.Arr[i]);
                 RemoveCandidates(GetColumn(fields, column), fields.Arr[i]);
-                RemoveCandidates(GetBlock(fields, block), fields.Arr[i]);
+                RemoveCandidates(GetBlock(fields, blockIndex), fields.Arr[i]);
 
                 var f = fields.Arr[i];
                 if (f.Candidates.Count == 1)
@@ -167,17 +199,61 @@ namespace Sudoku.Utils
                     fields.UnsolvedFields--;
                 }
             }
-            for (int i = 0; i < fields.Arr.Length; i++)
-            {
-                if (!fields.Arr[i].Solved)
-                    CheckAllArray(i, fields);
-            }
-            if (before == fields.UnsolvedFields)
-            {
-                int firstUnsolved = FindUnsolved(fields);
-                SolveUnsolvedField(firstUnsolved, fields);
-            }
+        }
 
+        private void AllCandsOneRowColumn(Field[] block, Fields f)
+        {
+            Field[] block2 = new Field[0];
+            for (int i = 1; i < 10; i++)
+            {
+                int row = -1;
+                int column = -1;
+                List<Field> list = new List<Field>();
+                for (int j = 0; j < block.Length; j++)
+                {
+                    if (block[j].Solved) continue;
+                    if (!block[j].Candidates.Contains((ushort)i)) continue;
+                    Point p = GetPoint(block[j], f);
+                    if (row == -1) row = (int)p.X;
+                    else if (row != (int)p.X) row = -2;
+                    if (column == -1) column = (int)p.Y;
+                    else if (column != (int)p.Y) column = -2;
+                    list.Add(block[j]);
+
+                }
+                if (row < 0 && column < 0) continue;
+                if (list.Count == 1)
+                {
+                    list[0] = f.Arr[row * 9 + column];
+                    list[0].Value = (ushort)i;
+                    f.Buttons[row*9 + column].Content = list[0].Value;
+                    list[0].Solved = true;
+                    f.UnsolvedFields--;
+                }
+
+                if (row >= 0) block2 = GetRow(f, row);
+                if (column >= 0) block2 = GetColumn(f, column);
+                for (int j = 0; j < block2.Length; j++)
+                {
+                    if (list.Contains(block2[j])) continue;
+                    block2[j].Candidates.Remove((ushort)i);
+                }
+            }
+        }
+
+        private Point GetPoint(Field field, Fields f)
+        {
+            Point p = new Point(-1, -1);
+            for (int i = 0; i < f.Arr.Length; i++)
+            {
+                if (f.Arr[i] == field)
+                {
+                    p.X = (int) i / 9;
+                    p.Y = i % 9;
+                    return p;
+                }
+            }
+            return p;
         }
 
         public void RemoveCandidates(Field[] fields, Field f)

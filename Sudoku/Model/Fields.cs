@@ -57,6 +57,29 @@ namespace Sudoku.Model
               { 2, 0, 0, 8, 0, 4, 0, 0, 7 },
               { 0, 1, 0, 9, 0, 7, 0, 6, 0 }
             };
+            res = new int[,] {
+              { 2, 0, 0, 5, 0, 7, 4, 0, 6 },
+              { 0, 0, 0, 0, 3, 1, 0, 0, 0 },
+              { 0, 0, 0, 0, 0, 0, 2, 3, 0 },
+              { 0, 0, 0, 0, 2, 0, 0, 0, 0 },
+              { 8, 6, 0, 3, 1, 0, 0, 0, 0 },
+              { 0, 4, 5, 0, 0, 0, 0, 0, 0 },
+              { 0, 0, 9, 0, 0, 0, 7, 0, 0 },
+              { 0, 0, 6, 9, 5, 0, 0, 0, 2 },
+              { 0, 0, 1, 0, 0, 6, 0, 0, 8 },
+            };
+            res = new int[,] {
+              { 0, 0, 0, 4, 9, 6, 0, 0, 0 },
+              { 7, 0, 3, 0, 0, 0, 0, 9, 0 },
+              { 0, 0, 0, 0, 0, 0, 5, 0, 0 },
+              { 0, 8, 4, 7, 0, 0, 0, 0, 0 },
+              { 0, 0, 0, 0, 0, 0, 0, 5, 2 },
+              { 3, 0, 0, 1, 0, 0, 7, 0, 0 },
+              { 0, 4, 0, 0, 5, 0, 0, 2, 7 },
+              { 6, 0, 0, 8, 0, 9, 0, 0, 3 },
+              { 0, 0, 0, 0, 0, 4, 0, 0, 0 },
+            };
+
             int currentHeight = -size + _MOV;
             int paddingLeft = _MOV;
             Button btn;
@@ -86,6 +109,7 @@ namespace Sudoku.Model
                 Canvas.SetTop(buttons[i], currentHeight);
 
                 buttons[i].Click += new RoutedEventHandler((sender, e) => {
+                    return;
                     bool left = false;
                     if (Mouse.LeftButton == MouseButtonState.Released)
                         left = true;
