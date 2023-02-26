@@ -79,6 +79,18 @@ namespace Sudoku.Model
               { 6, 0, 0, 8, 0, 9, 0, 0, 3 },
               { 0, 0, 0, 0, 0, 4, 0, 0, 0 },
             };
+            res = new int[,]
+            {
+              { 0, 0, 9, 0, 5, 0, 0, 1, 0 },
+              { 0, 0, 5, 0, 0, 3, 0, 0, 0 },
+              { 8, 0, 0, 4, 0, 0, 0, 0, 7 },
+              { 3, 0, 0, 0, 0, 0, 1, 7, 0 },
+              { 1, 9, 0, 0, 3, 2, 0, 6, 0 },
+              { 0, 0, 2, 0, 0, 0, 0, 0, 0 },
+              { 4, 7, 8, 0, 0, 0, 6, 0, 0 },
+              { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+              { 0, 0, 0, 0, 0, 1, 9, 0, 5 },
+            };
 
             int currentHeight = -size + _MOV;
             int paddingLeft = _MOV;
@@ -109,7 +121,6 @@ namespace Sudoku.Model
                 Canvas.SetTop(buttons[i], currentHeight);
 
                 buttons[i].Click += new RoutedEventHandler((sender, e) => {
-                    return;
                     bool left = false;
                     if (Mouse.LeftButton == MouseButtonState.Released)
                         left = true;
@@ -133,6 +144,13 @@ namespace Sudoku.Model
         }
         public void FieldPressed(int i, bool leftClick)
         {
+            string s = "";
+            foreach (var item in arr[i].Candidates)
+            {
+                s += item + " ";
+            }
+            MessageBox.Show(s);
+            return;
             if (arr[i].Solved) { return; }
             if (leftClick) { arr[i].Value++; changeButtonValue(i); return; }
             else { arr[i].Value--; changeButtonValue(i); return; }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace Sudoku.Utils
@@ -170,9 +171,68 @@ namespace Sudoku.Utils
                 {
                     Field[] block = GetBlock(fields, i);
                     AllCandsOneRowColumn(block, fields);
-                    tried = true;
+                    CheckNaked(block, fields);
+                }
+                TwoArrayCands(fields);
+                tried = true;
+            } 
+            else
+            {
+                tried = false;
+            }
+        }
+
+        private void CheckNaked(Field[] block, Fields fields)
+        {
+            Dictionary<Field, HashSet<ushort>> map = new Dictionary<Field, HashSet<ushort>>();
+            foreach (var item in block)
+            {
+                map[item] = item.Candidates;
+            }
+            foreach(var item in map.Keys)
+            {
+                if (map[item].Count != 2) continue;
+                foreach(var item2 in map.Keys)
+                {
+                    if (item == item2) continue;
+                    if (map[item2].Count != 2) continue;
+                    if (SetsEqual(map[item], map[item2]))
+                    {
+                        foreach (var item3 in block)
+                        {
+                            if (item3 != item && item3 != item2)
+                            {
+                                item3.Candidates.Remove(item.Candidates.First());
+                                item3.Candidates.Remove(item.Candidates.Last());
+                            }
+                        }
+                        Point p1 = GetPoint(item, fields);
+                        Point p2 = GetPoint(item2, fields);
+                        Field[] rc = new Field[2];
+                        if (p1.X == p2.X) rc = GetRow(fields, (int)p1.X);
+                        if (p1.Y == p2.Y) rc = GetColumn(fields, (int)p1.Y);
+
+                        foreach (var item3 in rc)
+                        {
+                            if (item3 != item && item3 != item2)
+                            {
+                                item3.Candidates.Remove(item.Candidates.First());
+                                item3.Candidates.Remove(item.Candidates.Last());
+                            }
+                        }
+                    }
                 }
             }
+        }
+
+        private bool SetsEqual(HashSet<ushort> hashSet1, HashSet<ushort> hashSet2)
+        {
+            if (hashSet1.Count != hashSet2.Count) return false;
+            foreach (var item in hashSet1)
+            {
+                if (!hashSet2.Contains(item)) return false;
+            }
+            return true;
         }
 
         private void SetCandidates(Fields fields)
@@ -347,6 +407,95 @@ namespace Sudoku.Utils
         public bool GameOver(Fields fields)
         {
             return fields.UnsolvedFields == 0;
+        }
+
+        public void TwoArrayCands(Fields fields)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                var firstBlock = GetBlock(fields, i);
+                for (int j = i + 1; j < 9; j++)
+                {
+                    var secondBlock = GetBlock(fields, j);
+                    CheckTwoArray(fields, firstBlock, secondBlock);
+                }
+            }
+        }
+
+        private void CheckTwoArray(Fields fields, Field[] firstBlock, Field[] secondBlock)
+        {
+            for (int i = 1; i < 10; i++)
+            {
+                List<Field> first = new List<Field>();
+                List<Field> second = new List<Field>();
+                foreach (var field in firstBlock)
+                {
+                    if (field.Solved) continue;
+                    if (field.Candidates.Contains((ushort)i))
+                    {
+                        first.Add(field);
+                    }
+                }
+                foreach (var field in secondBlock)
+                {
+                    if (field.Solved) continue;
+                    if (field.Candidates.Contains((ushort)i))
+                    {
+                        second.Add(field);
+                    }
+                }
+                HashSet<int> xAxis1 = new HashSet<int>();
+                HashSet<int> yAxis1 = new HashSet<int>();
+                foreach (var item in first)
+                {
+                    Point p = GetPoint(item, fields);
+                    xAxis1.Add((int)p.X);
+                    yAxis1.Add((int)p.Y);
+                }
+
+                HashSet<int> xAxis2 = new HashSet<int>();
+                HashSet<int> yAxis2 = new HashSet<int>();
+                foreach (var item in second)
+                {
+                    Point p = GetPoint(item, fields);
+                    xAxis2.Add((int)p.X);
+                    yAxis2.Add((int)p.Y);
+                }
+                HashSet<int> res = new HashSet<int>();
+                bool x = false;
+                if (CompareAxis(xAxis1, xAxis2))
+                {
+                    res = xAxis1;
+                    x = true;
+                }
+                if (CompareAxis(yAxis1, yAxis2)) res = yAxis1;
+                {
+                    foreach (var item in res)
+                    {
+
+                        Field[] r = new Field[0];
+                        if (x) r = GetRow(fields, item);
+                        else r = GetColumn(fields, item);
+
+                        for (int j = 0; j < r.Length; j++)
+                        {
+                            if (first.Contains(r[j]) || second.Contains(r[j])) continue;
+                            r[j].Candidates.Remove((ushort)i);
+                        }
+                    }
+                }
+            }
+        }
+
+        private bool CompareAxis(HashSet<int> axis1, HashSet<int> axis2)
+        {
+            if (axis1.Count != axis2.Count) return false;
+            if (axis1.Count != 2) return false;
+            foreach (var item in axis1)
+            {
+                if (!axis2.Contains(item)) return false;
+            }
+            return true;
         }
     }
 }
